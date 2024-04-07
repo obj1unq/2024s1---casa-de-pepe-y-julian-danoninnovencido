@@ -3,11 +3,13 @@ object casaDePepeYJulian {
 	// iniciar con un porcentaje != 0 y para eso necesito settear el nuevo indice de viveres.
 	var property viveres = 0
 	var property reparaciones = 0 //inicio sin reparaciones 
+	var estrategiaDeAhorro = minimoIndispensable 
+	var property cuenta = cuentaGastos
 	
 	
 	method hacerReparaciones(){return reparaciones > 0}
 	
-	method romperAlgo(monto){reparaciones += monto}
+	method romperAlgo(monto){reparaciones += cuenta.extraccion(monto)}
 	
 	method viveresSuficientes(){return viveres >= 40}
 	
@@ -56,24 +58,42 @@ object cuentaComb{
 // ---- Mantenimiento de la casa
 
 object minimoIndispensable{
-	const porcentajeMinInd = 40	//???
-	var porcentajeAComprar = porcentajeMinInd - casaDePepeYJulian.viveres()	
 	// si tengo 20 de viveres, la var = 40 (porcentajeMinInd)- 20 (los viveres que tengo) = 20
 	// 20 ahora es el porcentaje a comprar. Si la calidad = 4 ==> 20 * 4 = 80$ 
 	
-	method porcentajeAComprar(){return porcentajeAComprar}
+	method porcentajeAComprar(){return 40 - casaDePepeYJulian.viveres()}
+
+	method restockDeViveres(){casaDePepeYJulian.viveres(self.comprarViveres())}
 	
 	method comprarViveres(){
-		//Comprar lo necesario para llegar al 40% viveres
-			//Necesito sumar el porcentaje restante a los viveres de la casa
-			if (casaDePepeYJulian.viveresSuficientes())
-			return casaDePepeYJulian.viveres() + porcentajeAComprar
-			}
+		if (not casaDePepeYJulian.viveresSuficientes()) 
+			return self.porcentajeAComprar() + casaDePepeYJulian.viveres()
+		else return null
+	}
 		
-	method gastosDeViveres(calidad){return porcentajeAComprar * calidad} // da el gasto en pesos .
+	method gastosDeViveres(calidad){return self.porcentajeAComprar() * calidad} // da el gasto en pesos .
 }
 
-object full{}
+object full{
+	
+	method restockDeViveres(){
+		if (casaDePepeYJulian.casaEnOrden())
+			return casaDePepeYJulian.viveres(100)
+		else
+			return self.aumentoDel40EnViveres()
+	}
+	
+	method aumentoDel40EnViveres(){return casaDePepeYJulian.viveres(100) + 40}
+	
+	method restoParaReparaciones(cuentaBancaria){
+		if (cuentaBancaria.saldo() > 1000)	//hay saldo y hay mas de 1000
+			return casaDePepeYJulian.hacerReparaciones()
+		else
+			return null
+	}
+	
+	//method gastosDeViveres(){return self.porcentajeAComprar() * 5}
+}
 
 
 
