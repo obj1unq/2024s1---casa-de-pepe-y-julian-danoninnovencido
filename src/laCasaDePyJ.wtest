@@ -1,0 +1,44 @@
+import casa.*
+
+
+describe "Casos de prueba de casa" {
+	test "Caso primero. Rotura de 1000$, viveres suficientes, reparaciones y orden de la casa" {
+
+		casaDePepeYJulian.romperAlgo(1000)
+		casaDePepeYJulian.viveres(50)
+		casaDePepeYJulian.casaEnOrden()
+		assert.equals(casaDePepeYJulian.casaEnOrden(),false) // true significa que no hay que hacer reparaciones y que hay viveres suf.
+		// por su parte, que dé "false" significa que uno o los dos no está en condiciones.
+	}
+	
+	test "Sub caso 1. Hay reparaciones pero no tengo viveres suf."{
+		casaDePepeYJulian.romperAlgo(1000)
+		casaDePepeYJulian.viveres(10)
+		casaDePepeYJulian.casaEnOrden()
+		assert.equals(casaDePepeYJulian.casaEnOrden(),false)
+	}
+}
+
+describe "Casos de prueba de cuentas bancarias"{
+	test "Cuenta vacia. Costo de operacion de 20$. Ingreso de 1000$."{
+		
+		cuentaGastos.costoDeOperacion(20)
+		cuentaGastos.deposito(1000)
+		assert.equals(cuentaGastos.saldo(), 980)
+	}
+	
+	test "Deposito de 200$, extraccion de 100$. Cuenta Corriente con saldo de 500$. Costo de
+			operacion de 50$"{
+		
+		cuentaCorr.deposito(500)
+		cuentaGastos.costoDeOperacion(50)
+		cuentaComb.deposito(100)
+		cuentaComb.extraccion(200)
+		assert.equals(cuentaGastos.saldo(),50)
+		assert.equals(cuentaCorr.saldo(),300)
+		assert.equals(cuentaComb.saldoTotal(),350)
+	}		
+		
+			
+		
+}
